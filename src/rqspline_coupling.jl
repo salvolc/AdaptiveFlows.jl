@@ -199,7 +199,7 @@ function apply_rqs_coupling_flow(flow::Union{RQSplineCouplingBlock, InverseRQSpl
     n_dims_to_transform = sum(flow.mask)
 
     input_mask = .~flow.mask 
-    y, ladj = with_logabsdet_jacobian(rq_spline(get_params(flow.nn(x[input_mask,:], flow.nn_parameters, flow.nn_state)[1], n_dims_to_transform)...), x[flow.mask,:])   
+    y, ladj = with_logabsdet_jacobian(rq_spline(MonotonicSplines.rqs_params_from_nn(flow.nn(x[input_mask,:], flow.nn_parameters, flow.nn_state)[1], n_dims_to_transform)...), x[flow.mask,:])   
 
     return MonotonicSplines._sort_dimensions(y, x, flow.mask), ladj
 end
